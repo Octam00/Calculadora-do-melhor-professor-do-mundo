@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .fundo {
+            background-image: url('imagem1.jpg');
+            background-position: 60% 20%;
+            height: 100vh;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+        }
+        .calculadora {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .botao {
+            width: 60px;
+            height: 60px;
+            font-size: 25px;
+            cursor: pointer;
+            margin: 4px;
+            background-color: rgb(31, 31, 31);
+            border-radius: 15px;
+            color: #fff;
+        }
+        .botao:hover {
+            background-color: darkblue;
+        }
+        #resultado {
+            background-color: white;
+            width: 318px;
+            font-size: 35px;
+            height: 40px;
+            margin: 8px;
+            border-radius: 15px;
+            color: black;
+            text-align: right;
+            padding: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+    <div class="fundo">
+        <h1>Melhor Professor Do Mundo!</h1>
+        <div class="calculadora">
+            <h2>Professor Vinícius</h2>
+            <p id="resultado"></p>
+            <table>
+                <tr>
+                    <td><button class="botao" onclick="clean()"><span style="color: #fff; font-weight: 900;">𝑪</span></button></td>
+                    <td><button class="botao" onclick="back()"><span style="color: #fff; font-weight: 900;">⌫</span></button></td>
+                    <td><button class="botao" onclick="insert('/')">➗</button></td>
+                    <td><button class="botao" onclick="insert('*')">✖️</button></td>
+                    <td><button class="botao" onclick="insert('(')"><span style="color: #fff; font-weight: 900;">(</span></button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('7')"><span style="color: #fff; font-weight: 900;">7</span></button></td>
+                    <td><button class="botao" onclick="insert('8')"><span style="color: #fff; font-weight: 900;">8</span></button></td>
+                    <td><button class="botao" onclick="insert('9')"><span style="color: #fff; font-weight: 900;">9</span></button></td>
+                    <td><button class="botao" onclick="insert('-')">➖</button></td>
+                    <td><button class="botao" onclick="insert(')')"><span style="color: #fff; font-weight: 900;">)</span></button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('4')"><span style="color: #fff; font-weight: 900;">4</span></button></td>
+                    <td><button class="botao" onclick="insert('5')"><span style="color: #fff; font-weight: 900;">5</span></button></td>
+                    <td><button class="botao" onclick="insert('6')"><span style="color: #fff; font-weight: 900;">6</span></button></td>
+                    <td><button class="botao" onclick="insert('+')">➕</button></td>
+                    <td><button class="botao" onclick="sqrt()"><span style="color: #fff; font-weight: 900;">√</span></button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('1')"><span style="color: #fff; font-weight: 900;">1</span></button></td>
+                    <td><button class="botao" onclick="insert('2')"><span style="color: #fff; font-weight: 900;">2</span></button></td>
+                    <td><button class="botao" onclick="insert('3')"><span style="color: #fff; font-weight: 900;">3</span></button></td>
+                    <td><button class="botao" onclick="insert('%')"><span style="color: #fff; font-weight: 900;">%</span></button></td>
+                    <td rowspan="2"><button class="botao" style="height: 130px;" onclick="calcular()">🟰</button></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><button class="botao" style="width: 130px;" onclick="insert('0')"><span style="color: #fff; font-weight: 900;">0</span></button></td>
+                    <td><button class="botao" onclick="insert('.')"><span style="color: #fff; font-weight: 900;">.</span></button></td>
+                    <td><button class="botao" onclick="insertComma()"><span style="color: #fff; font-weight: 900;">,</span></button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <audio id="clickSound" src="click.mp3"></audio> <!-- Adicionei o som aqui -->
+    <script>
+        function playSound() {
+            var sound = document.getElementById('clickSound');
+            sound.currentTime = 0;  // Reinicia o som caso esteja no meio
+            sound.play();
+        }
+
+        function insert(num) {
+            playSound(); // Toca o som ao clicar
+            var resultado = document.getElementById('resultado');
+            resultado.innerHTML += num;
+            adjustFontSize();
+        }
+
+        function insertComma() {
+            playSound(); // Toca o som ao clicar
+            var resultado = document.getElementById('resultado');
+            var lastChar = resultado.innerHTML.slice(-1);
+
+            if (!isNaN(lastChar) && !resultado.innerHTML.includes(',')) {
+                resultado.innerHTML += ',';
+            }
+            adjustFontSize();
+        }
+
+        function clean() {
+            playSound(); // Toca o som ao clicar
+            document.getElementById('resultado').innerHTML = "";
+            adjustFontSize();
+        }
+
+        function back() {
+            playSound(); // Toca o som ao clicar
+            var resultado = document.getElementById('resultado');
+            resultado.innerHTML = resultado.innerHTML.slice(0, -1);
+            adjustFontSize();
+        }
+
+        function sqrt() {
+            playSound(); // Toca o som ao clicar
+            var resultado = document.getElementById('resultado');
+            resultado.innerHTML = 'Math.sqrt(' + resultado.innerHTML.replace(',', '.') + ')';
+            adjustFontSize();
+        }
+
+        function calcular() {
+            playSound(); // Toca o som ao clicar
+            var resultado = document.getElementById('resultado');
+            try {
+                resultado.innerHTML = eval(resultado.innerHTML.replace(/,/g, '.'));
+            } catch (e) {
+                resultado.innerHTML = "Erro";
+            }
+            adjustFontSize();
+        }
+
+        function adjustFontSize() {
+            var resultado = document.getElementById('resultado');
+            var maxFontSize = 60; // Aumentei o tamanho da fonte inicial
+            var minFontSize = 10; // Tamanho da fonte mínimo
+            var fontSize = maxFontSize;
+
+            while (resultado.scrollWidth > resultado.clientWidth && fontSize > minFontSize) {
+                fontSize--;
+                resultado.style.fontSize = fontSize + 'px';
+            }
+        }
+        
+    </script>
+</body>
+</html>
